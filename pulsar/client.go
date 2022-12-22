@@ -20,8 +20,7 @@ package pulsar
 import (
 	"crypto/tls"
 	"time"
-
-	"github.com/apache/pulsar-client-go/pulsar/auth"
+	"github.com/apache/pulsar-client-go/pulsar/internal/auth"
 	"github.com/apache/pulsar-client-go/pulsar/log"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -36,7 +35,7 @@ type Authentication interface{}
 
 // NewAuthentication Creates an authentication by name and params
 func NewAuthentication(name string, params string) (Authentication, error) {
-	return auth.NewProvider(name, params)
+	return NewProvider(name, params)
 }
 
 // NewAuthenticationToken Creates new Authentication provider with specified auth token

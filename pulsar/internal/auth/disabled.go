@@ -20,12 +20,13 @@ package auth
 import (
 	"crypto/tls"
 	"net/http"
+	"github.com/apache/pulsar-client-go/pulsar/auth"
 )
 
 type disabled struct{}
 
 // NewAuthDisabled return a interface of Provider
-func NewAuthDisabled() Provider {
+func NewAuthDisabled() auth.Provider {
 	return &disabled{}
 }
 

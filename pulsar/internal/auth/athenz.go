@@ -29,6 +29,7 @@ import (
 
 	zms "github.com/AthenZ/athenz/libs/go/zmssvctoken"
 	zts "github.com/AthenZ/athenz/libs/go/ztsroletoken"
+	"github.com/apache/pulsar-client-go/pulsar/auth"
 )
 
 const (
@@ -60,7 +61,7 @@ type privateKeyURI struct {
 	Path                     string
 }
 
-func NewAuthenticationAthenzWithParams(params map[string]string) (Provider, error) {
+func NewAuthenticationAthenzWithParams(params map[string]string) (auth.Provider, error) {
 	return NewAuthenticationAthenz(
 		params["providerDomain"],
 		params["tenantDomain"],
@@ -79,7 +80,7 @@ func NewAuthenticationAthenz(
 	privateKey string,
 	keyID string,
 	principalHeader string,
-	ztsURL string) Provider {
+	ztsURL string) auth.Provider {
 	var fixedKeyID string
 	if keyID == "" {
 		fixedKeyID = "0"

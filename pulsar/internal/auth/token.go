@@ -25,6 +25,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/apache/pulsar-client-go/pulsar/auth"
 )
 
 type tokenAuthProvider struct {
@@ -33,7 +34,7 @@ type tokenAuthProvider struct {
 }
 
 // NewAuthenticationTokenWithParams return a interface of Provider with string map.
-func NewAuthenticationTokenWithParams(params map[string]string) (Provider, error) {
+func NewAuthenticationTokenWithParams(params map[string]string) (auth.Provider, error) {
 	if params["token"] != "" {
 		return NewAuthenticationToken(params["token"]), nil
 	} else if params["file"] != "" {
@@ -45,7 +46,7 @@ func NewAuthenticationTokenWithParams(params map[string]string) (Provider, error
 
 // NewAuthenticationToken returns a token auth provider that will use the specified token to
 // talk with Pulsar brokers
-func NewAuthenticationToken(token string) Provider {
+func NewAuthenticationToken(token string) auth.Provider {
 	return &tokenAuthProvider{
 		tokenSupplier: func() (string, error) {
 			if token == "" {
@@ -59,14 +60,14 @@ func NewAuthenticationToken(token string) Provider {
 // NewAuthenticationTokenFromSupplier returns a token auth provider that get
 // the token data from a user supplied function. The function is invoked each
 // time the client library needs to use a token in talking with Pulsar brokers
-func NewAuthenticationTokenFromSupplier(tokenSupplier func() (string, error)) Provider {
+func NewAuthenticationTokenFromSupplier(tokenSupplier func() (string, error)) auth.Provider {
 	return &tokenAuthProvider{
 		tokenSupplier: tokenSupplier,
 	}
 }
 
 // NewAuthenticationTokenFromFile return a interface of a Provider with a string token file path.
-func NewAuthenticationTokenFromFile(tokenFilePath string) Provider {
+func NewAuthenticationTokenFromFile(tokenFilePath string) auth.Provider {
 	return &tokenAuthProvider{
 		tokenSupplier: func() (string, error) {
 			data, err := ioutil.ReadFile(tokenFilePath)

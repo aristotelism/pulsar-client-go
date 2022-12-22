@@ -29,6 +29,7 @@ import (
 	"github.com/apache/pulsar-client-go/oauth2/cache"
 	"github.com/apache/pulsar-client-go/oauth2/clock"
 	"github.com/apache/pulsar-client-go/oauth2/store"
+	"github.com/apache/pulsar-client-go/pulsar/auth"
 )
 
 const (
@@ -51,7 +52,7 @@ type oauth2AuthProvider struct {
 }
 
 // NewAuthenticationOAuth2WithParams return a interface of Provider with string map.
-func NewAuthenticationOAuth2WithParams(params map[string]string) (Provider, error) {
+func NewAuthenticationOAuth2WithParams(params map[string]string) (auth.Provider, error) {
 	issuer := oauth2.Issuer{
 		IssuerEndpoint: params[ConfigParamIssuerURL],
 		ClientID:       params[ConfigParamClientID],
@@ -86,7 +87,7 @@ func NewAuthenticationOAuth2WithParams(params map[string]string) (Provider, erro
 
 func NewAuthenticationOAuth2(
 	issuer oauth2.Issuer,
-	store store.Store) Provider {
+	store store.Store) auth.Provider {
 
 	return &oauth2AuthProvider{
 		clock:  clock.RealClock{},

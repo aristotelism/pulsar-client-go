@@ -20,6 +20,7 @@ package auth
 import (
 	"crypto/tls"
 	"net/http"
+	"github.com/apache/pulsar-client-go/pulsar/auth"
 )
 
 type tlsAuthProvider struct {
@@ -30,7 +31,7 @@ type tlsAuthProvider struct {
 }
 
 // NewAuthenticationTLSWithParams initialize the authentication provider with map param.
-func NewAuthenticationTLSWithParams(params map[string]string) Provider {
+func NewAuthenticationTLSWithParams(params map[string]string) auth.Provider {
 	return NewAuthenticationTLS(
 		params["tlsCertFile"],
 		params["tlsKeyFile"],
@@ -38,14 +39,14 @@ func NewAuthenticationTLSWithParams(params map[string]string) Provider {
 }
 
 // NewAuthenticationTLS initialize the authentication provider
-func NewAuthenticationTLS(certificatePath string, privateKeyPath string) Provider {
+func NewAuthenticationTLS(certificatePath string, privateKeyPath string) auth.Provider {
 	return &tlsAuthProvider{
 		certificatePath: certificatePath,
 		privateKeyPath:  privateKeyPath,
 	}
 }
 
-func NewAuthenticationFromTLSCertSupplier(tlsCertSupplier func() (*tls.Certificate, error)) Provider {
+func NewAuthenticationFromTLSCertSupplier(tlsCertSupplier func() (*tls.Certificate, error)) auth.Provider {
 	return &tlsAuthProvider{
 		tlsCertSupplier: tlsCertSupplier,
 	}

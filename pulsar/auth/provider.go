@@ -19,8 +19,6 @@ package auth
 
 import (
 	"crypto/tls"
-	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 )
@@ -54,45 +52,3 @@ type HTTPTransport struct {
 	T http.RoundTripper
 }
 
-// NewProvider get/create an authentication data provider which provides the data
-// that this client will be sent to the broker.
-// Some authentication method need to auth between each client channel. So it need
-// the broker, who it will talk to.
-func NewProvider(name string, params string) (Provider, error) {
-	m, err := parseParams(params)
-	if err != nil {
-		return nil, err
-	}
-
-	switch name {
-	case "":
-		return NewAuthDisabled(), nil
-
-	case "tls", "org.apache.pulsar.client.impl.auth.AuthenticationTls":
-		return NewAuthenticationTLSWithParams(m), nil
-
-	case "token", "org.apache.pulsar.client.impl.auth.AuthenticationToken":
-		return NewAuthenticationTokenWithParams(m)
-
-	case "athenz", "org.apache.pulsar.client.impl.auth.AuthenticationAthenz":
-		return NewAuthenticationAthenzWithParams(m)
-
-	case "oauth2", "org.apache.pulsar.client.impl.auth.oauth2.AuthenticationOAuth2":
-		return NewAuthenticationOAuth2WithParams(m)
-
-	case "basic", "org.apache.pulsar.client.impl.auth.AuthenticationBasic":
-		return NewAuthenticationBasicWithParams(m)
-
-	default:
-		return nil, fmt.Errorf("invalid auth provider '%s'", name)
-	}
-}
-
-func parseParams(params string) (map[string]string, error) {
-	var mapString map[string]string
-	if err := json.Unmarshal([]byte(params), &mapString); err != nil {
-		return nil, err
-	}
-
-	return mapString, nil
-}

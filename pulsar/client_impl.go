@@ -27,6 +27,7 @@ import (
 
 	"github.com/apache/pulsar-client-go/pulsar/internal"
 	"github.com/apache/pulsar-client-go/pulsar/auth"
+	authx "github.com/apache/pulsar-client-go/pulsar/internal/auth"
 	"github.com/apache/pulsar-client-go/pulsar/log"
 )
 
@@ -85,7 +86,7 @@ func newClient(options ClientOptions) (Client, error) {
 	var ok bool
 
 	if options.Authentication == nil {
-		authProvider = auth.NewAuthDisabled()
+		authProvider = authx.NewAuthDisabled()
 	} else {
 		authProvider, ok = options.Authentication.(auth.Provider)
 		if !ok {

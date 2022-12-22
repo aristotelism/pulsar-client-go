@@ -22,6 +22,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"net/http"
+	"github.com/apache/pulsar-client-go/pulsar/auth"
 )
 
 type basicAuthProvider struct {
@@ -30,7 +31,7 @@ type basicAuthProvider struct {
 	httpAuthToken    string
 }
 
-func NewAuthenticationBasic(username, password string) (Provider, error) {
+func NewAuthenticationBasic(username, password string) (auth.Provider, error) {
 	if username == "" {
 		return nil, errors.New("username cannot be empty")
 	}
@@ -45,7 +46,7 @@ func NewAuthenticationBasic(username, password string) (Provider, error) {
 	}, nil
 }
 
-func NewAuthenticationBasicWithParams(params map[string]string) (Provider, error) {
+func NewAuthenticationBasicWithParams(params map[string]string) (auth.Provider, error) {
 	return NewAuthenticationBasic(params["username"], params["password"])
 }
 
